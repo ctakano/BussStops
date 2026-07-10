@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>バスあと何分？</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="icon-512.png">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="bus-info">
+            <h2 id="departure-station">--</h2>
+            <div id="destination-station" class="arrow">↓ -- 行</div>
+        </div>
+
+        <div class="countdown-area">
+            <div id="minutes" class="minutes">計算中...</div>
+            <div id="schedule-details" class="schedule-details">次発: --:--</div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="tabs">
+                <button id="tab-outbound" class="tab-btn">行き (駅方面)</button>
+                <button id="tab-inbound" class="tab-btn">帰り (パーク方面)</button>
+            </div>
+            <button id="refresh-btn" class="refresh-btn">最新の状態に更新</button>
+        </div>
+
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
