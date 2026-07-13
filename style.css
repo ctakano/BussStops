@@ -56,7 +56,6 @@ body {
 }
 
 .minutes {
-    /* 🌟 文字数増加に伴い、スマホ画面にピタッと収まるサイズに再調整 */
     font-size: min(9vw, 3.6rem); 
     font-weight: 900;
     line-height: 1;

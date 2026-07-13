@@ -1,13 +1,9 @@
-// ========================================================
-// 📊 本物の運行時刻表データ（平日・土日祝の完全版）
-// ========================================================
 const timetableData = {
     // 🚌 【行き】パークタウン入口 ➔ 東松山駅〔東口〕
     "outbound": {
         "departure": "パークタウン入口",
         "destination": "東松山駅〔東口〕行",
         "timetable": {
-            // 📅 行きの平日ダイヤ（コピペいただいた実データ）
             "weekday": {
                 "5": [42],
                 "6": [10, 26, 36, 57],
@@ -28,7 +24,6 @@ const timetableData = {
                 "21": [8],
                 "22": [8]
             },
-            // 📅 行きの土日祝ダイヤ
             "holiday": {
                 "6": [50], "7": [15, 45], "8": [15, 45], "9": [16, 40], "10": [10, 46],
                 "11": [6, 26, 46], "12": [6, 26], "13": [6, 46], "14": [26], "15": [6, 26, 46],
@@ -42,8 +37,26 @@ const timetableData = {
         "departure": "東松山駅〔東口〕",
         "destination": "パークタウン五領 行",
         "timetable": {
-            // 📅 帰りの平日ダイヤ（コピペいただいた実データ）
             "weekday": {
+                "6": [38, 51],
+                "7": [24, 36, 55],
+                "8": [8, 28, 40],
+                "9": [19, 40],
+                "10": [18, 40],
+                "11": [4, 25, 43],
+                "12": [0, 35, 55],
+                "13": [15, 35, 55],
+                "14": [15, 35],
+                "15": [17, 55],
+                "16": [25, 42],
+                "17": [2, 17, 35, 58],
+                "18": [22, 40],
+                "19": [0, 27, 51],
+                "20": [23, 52],
+                "21": [23, 52],
+                "22": [23]
+            },
+            "holiday": {
                 "7": [4, 34],
                 "8": [4, 34],
                 "9": [5, 29, 59],
@@ -59,14 +72,7 @@ const timetableData = {
                 "19": [20, 45],
                 "20": [0, 30],
                 "21": [0, 30],
-                "22": [0] // 平日のみの最終便
-            },
-            // 📅 帰りの土日祝ダイヤ
-            "holiday": {
-                "7": [4, 34], "8": [4, 34], "9": [5, 29, 59], "10": [35, 55],
-                "11": [15, 35, 55], "12": [15, 55], "13": [35], "14": [15, 55],
-                "15": [15, 35], "16": [5, 45], "17": [15, 35], "18": [0, 20, 45],
-                "19": [20, 45], "20": [0, 30], "21": [0, 30]
+                "22": [0]
             }
         }
     }
@@ -75,25 +81,19 @@ const timetableData = {
 let currentDirection = "outbound";
 let timerId = null;
 
-// 📱 起動時の処理
 window.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
-    
-    // ⏰ 午前中(12時未満)なら「行き」、午後(12時以降)なら「帰り」を自動選択
     if (now.getHours() < 12) {
         currentDirection = "outbound";
     } else {
         currentDirection = "inbound";
     }
 
-    // 各ボタンのイベント設定
     document.getElementById('tab-outbound').addEventListener('click', () => switchDirection('outbound'));
     document.getElementById('tab-inbound').addEventListener('click', () => switchDirection('inbound'));
     document.getElementById('refresh-btn').addEventListener('click', updateCountdown);
 
     updateCountdown();
-
-    // 1秒ごとに自動リフレッシュしてカウントダウンを動かす
     timerId = setInterval(updateCountdown, 1000);
 });
 
@@ -113,7 +113,6 @@ function updateCountdown() {
     const now = new Date();
     const day = now.getDay();
     
-    // 🌟 今日が土日（日:0, 土:6）ならholiday、平日ならweekdayを自動選択
     const isHoliday = (day === 0 || day === 6); 
     const type = isHoliday ? 'holiday' : 'weekday';
 
@@ -148,7 +147,6 @@ function updateCountdown() {
 
     const nextBus = foundBuses[0];
     const nextBusTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextBus.hour, nextBus.min, 0);
-    
     const diffMs = nextBusTime.getTime() - now.getTime();
     
     if (diffMs <= 0) {
@@ -168,12 +166,11 @@ function updateCountdown() {
     }
     detailsText.innerText = detailsString;
 
-    // 残り秒数による文字色の変更判定
     let textColor = 'var(--text-normal)';
     if (totalSeconds <= 180) {
-        textColor = 'var(--text-urgent)'; // 3分以内：赤
+        textColor = 'var(--text-urgent)';
     } else if (totalSeconds <= 600) {
-        textColor = 'var(--text-soon)';   // 10分以内：緑
+        textColor = 'var(--text-soon)';
     }
     minText.style.color = textColor;
 }
