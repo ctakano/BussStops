@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>バスあと何分？</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="icon-512.png">
+</head>
+<body>
+    <div class="container">
+        <div class="bus-info">
+            <h2 id="departure-station">--</h2>
+            <div id="destination-station" class="arrow">↓ -- 行</div>
+        </div>
+        <div class="countdown-area">
+            <div id="minutes" class="minutes">計算中...</div>
+            <div id="schedule-details" class="schedule-details">次発: --:--</div>
+        </div>
+        <div class="bottom-nav">
+            <div class="tabs">
+                <button id="tab-outbound" class="tab-btn">行き (駅方面)</button>
+                <button id="tab-inbound" class="tab-btn">帰り (パーク方面)</button>
+            </div>
+            <button id="refresh-btn" class="refresh-btn">最新の情報に更新</button>
+
+            <div style="background: #fdf6e2; border: 1px dashed #debc6f; padding: 10px; border-radius: 6px; font-size: 0.8rem; color: #b58900; margin-top: 10px;">
+                <p>【新アイコン作成】緑背景×白単色バスに修正しました</p>
+                <button style="background: #2e7d32; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px;" onclick="makeIcon(192, 'icon-192.png')">192px作成</button>
+                <button style="background: #2e7d32; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px;" onclick="makeIcon(512, 'icon-512.png')">512px作成</button>
+            </div>
+
+            <div style="font-size: 0.75rem; color: #bbbbbb; margin-top: 12px; text-align: right; padding-right: 5px; letter-spacing: 0.05em;">
+                ver 1.00
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+        // 🎨 Font Awesome風のスタイリッシュな白単色バスを描くロジック
+        function makeIcon(size, filename) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // 1. 背景を綺麗なグリーンに
+            ctx.fillStyle = '#2e7d32'; 
+            ctx.fillRect(0, 0, size, size);
+            
+            // 2. 「東松山」の文字を大きく、バランスを上に調整
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${size * 0.17}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('東松山', size / 2, size * 0.26);
+            
+            // 3. Font Awesome（fa-bus-simple）風の前向きバスシルエットを白単色で描写
+            ctx.fillStyle = '#ffffff';
+            
+            // 車体本体（角丸）
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(size * 0.28, size * 0.43, size * 0.44, size * 0.36, size * 0.05);
+            } else {
+                ctx.rect(size * 0.28, size * 0.43, size * 0.44, size * 0.36);
+            }
+            ctx.fill();
+            
+            // 窓のくり抜き（背景色で塗る）
+            ctx.fillStyle = '#2e7d32';
+            ctx.fillRect(size * 0.33, size * 0.47, size * 0.34, size * 0.13);
+            
+            // ライトのくり抜き（背景色で丸い穴をあける）
+            ctx.beginPath();
+            ctx.arc(size * 0.38, size * 0.69, size * 0.025, 0, Math.PI * 2);
+            ctx.arc(size * 0.62, size * 0.69, size * 0.025, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // タイヤ（下部ののぞき窓風に白ベタを追加）
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(size * 0.34, size * 0.79, size * 0.06, size * 0.04);
+            ctx.fillRect(size * 0.60, size * 0.79, size * 0.06, size * 0.04);
+            
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
